@@ -30,23 +30,19 @@
     //DONE - It should not visit deleted elements.
     //DONE - If an existing, unvisited element of the array is changed by callback, its value passed to the callback will be the given value at the time `every` visits that element.
     //DONE - It should not visit elements that are appended to the array after the call to `every` begins.
-function every(array, callback, optionalThis){
-  var everyCallback = callback;
-  if(optionalThis){
-    everyCallback = callback.bind(optionalThis);
-  }
-  for (var i = 0; i < array.length; i++){
-    if (!(i in array)){
-      i++;
+  function every(array, callback, optionalThis){
+    var everyCallback = callback;
+    if(optionalThis){
+      everyCallback = callback.bind(optionalThis);
     }
-    if(i in array){
-      if(!everyCallback(array[i], i, array)){
-      return false;
-    };
+    for (var i = 0; i < array.length; i++) {
+      if(i in array && !everyCallback(array[i], i, array)){
+        return false;
+      }
     }
-  }
-  return true;
-};
+    return true;
+  };
+
 tests({
   'It should pass in the ith element as the first argument to the callback.': function() {
     every([1], function(number){
@@ -163,5 +159,4 @@ tests({
     });
   }
 });
-
 </script>
