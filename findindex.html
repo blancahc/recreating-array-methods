@@ -20,12 +20,12 @@
   //[DONE] It should pass in the original array position as the third argument to the callback.
   //[DONE] It should pass in an optional this object.
   //[DONE] It should return the index of the first element where callback returns true.
-  //It should return -1 if there are no elements where callback returns true.
-  //It should not mutate the orignal array which is passed.
-  //It should visit all indexes, including those with unassigned values.
-  //If an existing, unvisited element of the array is changed by callback, its value passed to the callback will be the given value at the time find visits that element.
-  //It should visit deleted elements and its value will be the value of when find visits that index.
-  //It should not visit elements that are appended to the array after the call to find begins.
+  //[DONE] It should return -1 if there are no elements where callback returns true.
+  //[DONE] It should not mutate the orignal array which is passed.
+  //[DONE] It should visit all indexes, including those with unassigned values.
+  //[DONE] If an existing, unvisited element of the array is changed by callback, its value passed to the callback will be the given value at the time find visits that element.
+  //[DONE] It should visit deleted elements and its value will be the value of when find visits that index.
+  //[DONE] It should not visit elements that are appended to the array after the call to find begins.
 function findIndex (array, callback, optionalThis) {
   var findIndexCallback = callback;
   if(optionalThis){
