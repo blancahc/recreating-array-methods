@@ -1,0 +1,140 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function signature:
+  //concat(old_array, [value1[, value2[, ...[, valueN]]]])
+
+//Function Prototype
+// function concat (OriginalArray, ...arguments){
+//   var result = [];
+//   for (var i = 0; i < arguments.length; i++){
+//   if(arguments[i] instanceof Array){
+//     var arr =  arguments[i];
+//     for (var j = 0; j < arr.length; j++){
+//       result.push(arr[j]);
+//     }
+//   } else{
+//     result.push(arguments[i]);
+//   }
+// }
+// return result
+// }
+//parameters:
+  //array
+  //value (can be any type of value, ie, array, number, string, object, undefined, null)
+
+//Return value: 
+  //A new Array instance.
+//Requirements:
+  //Main behavior
+    //It should return an array.
+    //It should pass in the original array as the first values of the new array.
+    //It should not mutate the orignal array which is passed.
+    //If the argument is an array, it should return a new array with elements in the object on which it is called, followed in order by, for each argument, the elements of that argument
+    //If the argument is not an array, it should return that arguments appended to the new array
+    //It does not recurse into nested array arguments.
+  //Edge Cases
+    //The concat method does not alter `this`
+    //Any operation on the new array (except operations on elements which are object references) will have no effect on the original arrays, and vice versa.
+    //If no arguments are passed, it should return a copy of the original array. 
+
+function concat (...arguments){
+  //first check that first argument is an array
+  if(!(arguments[0] instanceof Array)){
+      throw new SyntaxError('Invalid or unexpected token');
+    }
+  var result = [];
+  for (var i = 0; i < arguments.length; i++){
+    if(arguments[i] instanceof Array){
+      var arr =  arguments[i];
+      for (var j = 0; j < arr.length; j++){
+          result.push(arr[j]);
+      }
+    } else{
+      result.push(arguments[i]);
+    }
+}
+return result;
+};
+tests({
+  'If first value is not an array, it should return a SyntaxError.': function() {
+    var isSyntaxError = false;
+      try {
+        concat('I am not an array');
+      } 
+      catch(e) {
+        isSyntaxError = (e instanceof SyntaxError);
+      }
+      eq(isSyntaxError, true);
+  },
+  'It should return an array.': function() {
+    var concatArray = concat([]);
+  //concatArray is actually an array.
+  eq(Array.isArray(concatArray), true);
+  },
+  'The returned array should be a new array and not the array passed in as the first argument.': function() {
+    var testArray = [1,2,3];
+    var concatArray = concat(testArray);
+    eq(concatArray !== testArray, true);
+  },
+  'If the second argument passed is an array, it should return a new array with elements in the object on which it is called, followed in order by the elements of the passed array.': function() {
+    var testArr = [1];
+    var concatArr = concat(testArr, [2, 3]);
+    eq(concatArr.length === 3, true);
+    eq(concatArr[0], 1);
+    eq(concatArr[1], 2);
+    eq(concatArr[2], 3);
+  },
+  'It should not mutate the orignal array which is passed.': function() {
+    var testArr = [1];
+    var concatArr = concat(testArr, [2, 3]);
+    eq(testArr.length === 1, true);
+    eq(testArr[0], 1);
+    eq(testArr[1], null);
+  },
+  'If the argument is not an array, it should return that argument appended to the new array': function() {
+    var concatArr = concat([1], 'notAnArray');
+    eq(concatArr.length === 2, true);
+    eq(concatArr[0], 1);
+    eq(concatArr[1], 'notAnArray');
+  },
+  'It does not recurse into nested array arguments.': function() {
+    var testArr = [2,[3, 4]]
+    var concatArr = concat([1], testArr);
+    eq(concatArr.length === 3, true);
+    eq(concatArr[0], 1);
+    eq(concatArr[1], 2);
+    eq(concatArr[2][0], 3);
+    eq(concatArr[2][1], 4);
+
+  },
+  'The concat method does not alter `this`.':function(){
+    var concatArr = concat([1], this.name = 'blanca');
+    eq(this.name, 'blanca');
+  },
+  'Any operation on the new array (except operations on elements which are object references) will have no effect on the original array.': function() {
+    var testArr = [0];
+    var concatArr = concat(testArr, [1])
+      function doSomething (){
+        concatArr.push('testing');
+      }
+      eq(testArr[0], 0);
+      eq(testArr.length === 1, true);
+  },
+  'Any operation on the original array (except operations on elements which are object references) will have no effect on the new array.': function() {
+    var testArr = [0];
+    var concatArr = concat(testArr, [1])
+      function doSomething (){
+        testArr.push('testing');
+      }
+      eq(concatArr[0], 0);
+      eq(concatArr[1], 1);
+      eq(concatArr.length === 2, true);
+  },
+  'If no arguments are passed, it should return a copy of the original array.': function() {
+    var testArr = [1];
+    var concatArr = concat(testArr);
+    eq(concatArr[0], 1);
+    eq(concatArr.length === 1, true);
+  }
+});
+</script>
