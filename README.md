@@ -7,3 +7,4 @@ Process:
 4. Write examples of what it should do
 5. Write the english for each test. Think of edge cases. Make them all fail. 
 6. Make each test pass one at a time by writing out your function.
+
