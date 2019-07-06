@@ -1,0 +1,77 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function signature:
+  //indexOf(array, searchElement[, fromIndex])
+
+//Return value: 
+  //It should pass in an array as its first argumnet.
+  //It should pass in a searchElement as the second argument.
+  //It should return the index of the first element that matches the given element. 
+  //It should return -1 if no elements match the given element.
+  //It should pass an optional fromIndex to start the search at. 
+  //If the fromIndex is greater than or equal to the array's length, it should return -1.
+  //If the fromIndex is greater than or equal to the array's length, it should not search the array.
+  //If the fromIndex is 0, then the whole array will be searched.
+  //If no fromIndex is given, then it starts searching at index 0.
+  //If the provided index value is a negative number, it is taken as the offset from the end of the array. 
+  //If the provided index is negative, the array is still searched from front to back.
+ function indexOf(array, searchElement, fromIndex){
+   if(!(arguments[0] instanceof Array)){
+     throw new SyntaxError('Invalid or unexpected token');
+   }
+   var startingIndex = 0;
+   if(fromIndex){
+    startingIndex = fromIndex;
+   }
+   if(fromIndex < 0){
+     startingIndex = array.length + fromIndex;
+   }
+   for (var i = startingIndex; i < array.length; i++){
+       if(array[i] === searchElement){
+         return i;
+       }
+     }
+   return -1;
+ }
+tests({
+  'If first value is not an array, it should return a SyntaxError.': function() {
+    var isSyntaxError = false;
+      try {
+        indexOf('I am not an array');
+      } 
+      catch(e) {
+        isSyntaxError = (e instanceof SyntaxError);
+      }
+      eq(isSyntaxError, true);
+  },
+  'It should return the index of the first element that matches the given element.': function() {
+    result = indexOf([1, 2, 3], 2);
+    eq(result === 1, true);
+  },
+  'It should return -1 if no elements match the given element.': function() {
+    result = indexOf([1, 3, 4], 2);
+    eq(result === -1, true);
+  },
+  'It should pass an optional fromIndex to start the search at.': function() {
+    result = indexOf([1, 2, 3], 2, 2);
+    eq(result === -1, true);
+  }, 
+  'If the fromIndex is greater than or equal to the array\'s length, it should return -1.': function () {
+    result = indexOf([1, 2, 3], 2, 3);
+    eq(result === -1, true);
+  },
+  'If the fromIndex is 0, then it starts searching at index 0.': function() {
+    result = indexOf([1, 2, 3], 3, 0);
+    eq(result === 2, true);
+  },
+  'If the provided index value is a negative number, it is taken as the offset from the end of the array.': function() {
+    result = indexOf([1, 2, 3], 3, -2);
+    eq(result === 2, true);
+  }, 
+  'If the provided index is negative, the array is still searched from front to back.': function() {
+    result = indexOf([1, 2, 3, 3], 3, -2);
+    eq(result === 2, true);
+  }
+});
+
+</script>

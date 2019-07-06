@@ -37,19 +37,21 @@
     //Any operation on the new array (except operations on elements which are object references) will have no effect on the original arrays, and vice versa.
     //If no arguments are passed, it should return a copy of the original array. 
 
-function concat (...arguments){
+function concat (array/*,optional valuesN*/){
   //first check that first argument is an array
   if(!(arguments[0] instanceof Array)){
       throw new SyntaxError('Invalid or unexpected token');
     }
   var result = [];
+  //loop through arguments
   for (var i = 0; i < arguments.length; i++){
+    //if argument is an array
     if(arguments[i] instanceof Array){
       var arr =  arguments[i];
       for (var j = 0; j < arr.length; j++){
           result.push(arr[j]);
       }
-    } else{
+    } else {
       result.push(arguments[i]);
     }
 }
