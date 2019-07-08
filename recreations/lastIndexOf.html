@@ -14,6 +14,7 @@
   //If no fromIndex is given, then it starts searching at length-1.
   //If the provided index value is a negative number, it is taken as the offset from the end of the array. 
   //If the provided index is negative, the array is still searched from right to left.
+  //It should skip holes
   function lastIndexOf(array, searchElement, fromIndex){
 if(!(arguments[0] instanceof Array)){
   throw new SyntaxError('Invalid or unexpected token');

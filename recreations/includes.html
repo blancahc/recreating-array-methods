@@ -1,0 +1,91 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function signature:
+  //includes(array, valueToFind[, optionalFromIndex])
+
+//Return value: 
+  //True if valueToFind is present in array, or false if not found. 
+//Requirements:
+  //If first value is not an array, it should return a SyntaxError.
+  //It should return true if the array contains the valueToFind.
+  //It should return false if the array does not contain the valueToFind.
+  //It should pass an optionalFromIndex to indicate what index will the search begin at. 
+  //If the optionalFromIndex is greater than or equal to the array's length, it should return false.
+  //If there is no optionalFromIndex, then it starts searching at 0.
+  //Values of zero are all considered to be equal regardless of sign (that is, -0 is considered to be equal to both 0 and +0).
+  //If the provided optionalFromIndex value is a negative number, it is taken as the offset from the end of the array.
+  //If the provided optionalFromIndex is negative, the array is still searched from front to back.
+  //It should not skip holes.
+
+function includes(array, valueToFind, optionalFromIndex){
+  if(!(arguments[0] instanceof Array)){
+    throw new SyntaxError('Invalid or unexpected token');
+  }
+  var startingIndex = 0;
+  if(optionalFromIndex){
+    startingIndex = optionalFromIndex;
+  }
+  if(optionalFromIndex < 0){
+    startingIndex = array.length + optionalFromIndex;
+  }
+  for(var i = startingIndex; i < array.length; i++ ){
+    if((isNaN(array[i]) && isNaN(valueToFind)) || array[i] === valueToFind){
+      return true;
+    }
+  }
+  return false;
+}
+tests({
+  'If first value is not an array, it should return a SyntaxError.': function() {
+    var isSyntaxError = false;
+      try {
+        includes('I am not an array');
+      } 
+      catch(e) {
+        isSyntaxError = (e instanceof SyntaxError);
+      }
+      eq(isSyntaxError, true);
+  },
+  'It should return true if the array contains the valueToFind.': function() {
+    var result = includes([1, 2, 3], 2);
+    eq(result, true);
+  },
+  'It should return false if the array does not contain the valueToFind.': function() {
+    var result = includes([1, 3, 4], 2);
+    eq(result, false);
+  },
+  'It should pass an optionalFromIndex to indicate what index will the search begin at.': function() {
+    var result = includes([1, 2, 3], 2, 2);
+    eq(result, false);
+  }, 
+  'If the optionalFromIndex is greater than or equal to the array\'s length, it should return false.': function () {
+    var result = includes([1, 2, 3], 2, 3);
+    eq(result, false);
+  },
+  'If there is no optionalFromIndex, then it starts searching at 0.': function(){
+    var result = includes(['blanca', 'is', 'my'], 'blanca');
+    eq(result, true);
+  },
+  'Values of zero are all considered to be equal regardless of sign (that is, -0 is considered to be equal to both 0 and +0).': function() {
+    var result = includes([3, 1, 2], 3, +0);
+    eq(result, true);
+  },
+  'If the provided optionalFromIndex value is a negative number, it is taken as the offset from the end of the array.': function() {
+    var result = includes([3, 2, 1], 3, -2);
+    eq(result, false);
+  }, 
+  'If the provided optionalFromIndex is negative, the array is still searched from front to back.': function() {
+    var result = includes([1, 2, 3, 4], 4, -2);
+    eq(result, true);
+  },
+  'It should not skip holes.': function() {
+    var result = includes([, , ,], undefined);
+    eq(result, true);
+  }, 
+  'It should return true if NaN is the valueToFind and it is in the array.': function(){
+    var result = includes([NaN], NaN);
+    eq(result, true);
+  }
+});
+
+</script>
