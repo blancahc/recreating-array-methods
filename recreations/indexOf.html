@@ -27,7 +27,7 @@
      startingIndex = array.length + fromIndex;
    }
    for (var i = startingIndex; i < array.length; i++){
-       if(array[i] === searchElement){
+       if(i in array && array[i] === searchElement){
          return i;
        }
      }
@@ -71,7 +71,11 @@ tests({
   'If the provided index is negative, the array is still searched from front to back.': function() {
     result = indexOf([1, 2, 3, 3], 3, -2);
     eq(result === 2, true);
-  }
+  },
+  'It should skip holes.': function() {
+      var result = indexOf([, , ,], undefined);
+      eq(result, -1);
+    }
 });
 
 </script>
