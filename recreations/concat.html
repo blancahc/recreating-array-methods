@@ -82,7 +82,7 @@ tests({
   'If the second argument passed is an array, it should return a new array with elements in the object on which it is called, followed in order by the elements of the passed array.': function() {
     var testArr = [1];
     var concatArr = concat(testArr, [2, 3]);
-    eq(concatArr.length === 3, true);
+    eq(concatArr.length, 3);
     eq(concatArr[0], 1);
     eq(concatArr[1], 2);
     eq(concatArr[2], 3);
@@ -90,20 +90,20 @@ tests({
   'It should not mutate the orignal array which is passed.': function() {
     var testArr = [1];
     var concatArr = concat(testArr, [2, 3]);
-    eq(testArr.length === 1, true);
+    eq(testArr.length, 1);
     eq(testArr[0], 1);
     eq(testArr[1], null);
   },
   'If the argument is not an array, it should return that argument appended to the new array': function() {
     var concatArr = concat([1], 'notAnArray');
-    eq(concatArr.length === 2, true);
+    eq(concatArr.length, 2);
     eq(concatArr[0], 1);
     eq(concatArr[1], 'notAnArray');
   },
   'It does not recurse into nested array arguments.': function() {
     var testArr = [2,[3, 4]]
     var concatArr = concat([1], testArr);
-    eq(concatArr.length === 3, true);
+    eq(concatArr.length, 3);
     eq(concatArr[0], 1);
     eq(concatArr[1], 2);
     eq(concatArr[2][0], 3);
@@ -121,7 +121,7 @@ tests({
         concatArr.push('testing');
       }
       eq(testArr[0], 0);
-      eq(testArr.length === 1, true);
+      eq(testArr.length, 1);
   },
   'Any operation on the original array (except operations on elements which are object references) will have no effect on the new array.': function() {
     var testArr = [0];
@@ -131,13 +131,13 @@ tests({
       }
       eq(concatArr[0], 0);
       eq(concatArr[1], 1);
-      eq(concatArr.length === 2, true);
+      eq(concatArr.length, 2);
   },
   'If no arguments are passed, it should return a copy of the original array.': function() {
     var testArr = [1];
     var concatArr = concat(testArr);
     eq(concatArr[0], 1);
-    eq(concatArr.length === 1, true);
+    eq(concatArr.length, 1);
   }
 });
 </script>

@@ -1,0 +1,31 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function signature:
+  //push(originalArray, element1[, ...[, elementN]])
+//parameters:
+  //array
+  //elementN
+
+//Return value: 
+  //The new length property of the object upon which the method was called.
+function push(array /*[,elementN]*/){
+  for (i = 1; i < arguments.length; i++){
+    array[array.length] = arguments[i];
+  }
+  return array.length;
+};
+tests({
+  'It should return the array.length.': function() {
+    var result = push([1], 2, 3);
+    eq(result, 3);
+  },
+  'It should append the argument(s) in the order they are passed in and return the updated array.length': function() {
+    var array = [1];
+    var result = push(array, 2, 3);
+    eq(array[0], 1);
+    eq(array[1], 2);
+    eq(array[2], 3);
+    eq(result, 3);
+  },
+});
+</script>

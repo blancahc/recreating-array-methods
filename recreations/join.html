@@ -30,50 +30,50 @@ function join(array, optionalSeperator) {
 tests({
   'It should return string.': function() {
     var result = join([]);
-    eq(result === '', true);
+    eq(result, '');
   },
   'It should return a string with all elements of originalArray concatenated with a comma in between': function() {
     var result = join(['I', 'am', 'Blanca']);
-    eq(result === 'I,am,Blanca', true);
+    eq(result, 'I,am,Blanca');
   },
   'If optionalSeperator is passed, it will concatenate all elements in the original array, with the optionalSperator in between of each element.': function() {
     var result = join(['I', 'am', 'Blanca'], '+');
-    eq(result === 'I+am+Blanca', true);
+    eq(result, 'I+am+Blanca');
   },
   'If optionalSeperator is an empty string, it will concatenate all elements in the original array, with nothing in between.': function() {
     var result = join(['I', 'am', 'Blanca'], '');
-    eq(result === 'IamBlanca', true);
+    eq(result, 'IamBlanca');
   },
   'If optionalSeperator is ommited, it will concatenate all elements in the original array, with a comma in between.': function() {
     var result = join(['I', 'am', 'Blanca'],);
-    eq(result === 'I,am,Blanca', true);
+    eq(result, 'I,am,Blanca');
   },
   'If arr.length is 0, the empty string is returned.': function() {
     var result = join([],);
-    eq(result === '', true);
+    eq(result, '');
   },
   'It can also concatenate Array-like objects into a string': function(){
     function list() {
     return join(arguments);
     }
     var result = list(1, 2, 3);
-    eq(result=== '1,2,3', true);
+    eq(result, '1,2,3');
   },
   'If an array is passed in as the optionalSeperator, it will place the array in between each element of the original array.': function() {
     var result = join(['I', 'am', 'Blanca'],'[1,2,3]');
-    eq(result === 'I[1,2,3]am[1,2,3]Blanca', true);
+    eq(result, 'I[1,2,3]am[1,2,3]Blanca');
   },
   'If a boolean is passed in as the optionalSeperator, it will insert the bolean will be between each element of the array.': function() {
     var result = join(['I', 'am', 'Blanca'],true);
-    eq(result === 'ItrueamtrueBlanca', true);
+    eq(result, 'ItrueamtrueBlanca');
   },
   'If an object is passed as the optionalSeperator, it will insert [object Object] in between each element of the orignal array.': function() {
     var result = join(['I', 'am', 'Blanca'],{name: 'Blanca', age: 32});
-    eq(result === 'I[object Object]am[object Object]Blanca', true);
+    eq(result, 'I[object Object]am[object Object]Blanca');
   },
   'If a number is passed as the optionalSeperator, it will insert the number in between each element of the orignal array.': function() {
     var result = join(['I', 'am', 'Blanca'],32);
-    eq(result === 'I32am32Blanca', true);
+    eq(result, 'I32am32Blanca');
   }
 });
 </script>

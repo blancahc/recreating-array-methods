@@ -47,31 +47,31 @@ tests({
   },
   'It should return the index of the first element that matches the given element.': function() {
     var result = indexOf([1, 2, 3], 2);
-    eq(result === 1, true);
+    eq(result, 1);
   },
   'It should return -1 if no elements match the given element.': function() {
     var result = indexOf([1, 3, 4], 2);
-    eq(result === -1, true);
+    eq(result, -1);
   },
   'It should pass an optional fromIndex to start the search at.': function() {
     var result = indexOf([1, 2, 3], 2, 2);
-    eq(result === -1, true);
+    eq(result, -1);
   }, 
   'If the fromIndex is greater than or equal to the array\'s length, it should return -1.': function () {
     var result = indexOf([1, 2, 3], 2, 3);
-    eq(result === -1, true);
+    eq(result, -1);
   },
   'If the fromIndex is 0, then it starts searching at index 0.': function() {
     var result = indexOf([1, 2, 3], 3, 0);
-    eq(result === 2, true);
+    eq(result, 2);
   },
   'If the provided index value is a negative number, it is taken as the offset from the end of the array.': function() {
     var result = indexOf([1, 2, 3], 3, -2);
-    eq(result === 2, true);
+    eq(result, 2);
   }, 
   'If the provided index is negative, the array is still searched from front to back.': function() {
     var result = indexOf([1, 2, 3, 3], 3, -2);
-    eq(result === 2, true);
+    eq(result, 2);
   },
   'It should skip holes.': function() {
     var result = indexOf([, , ,], undefined);
