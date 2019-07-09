@@ -19,7 +19,7 @@ This is an exercise for the Watch and Code testing series.
 8. Done - Array.prototype.lastIndexOf
 9. Done - Array.prototype.includes
 10. Done - Array.prototype.slice
-11. Array.prototype.join
+11. Done - Array.prototype.join
 12. Array.prototype.push
 13. Array.prototype.pop
 14. Array.prototype.shift
