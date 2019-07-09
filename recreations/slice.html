@@ -1,0 +1,147 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function signature:
+  //slice(originalArray, [begin[, end]])
+
+//parameters:
+  //array
+  //optionalBegin
+
+//Return value: 
+  //A new Array instance.
+function slice(array, optionalBegin, optionalEnd){
+ var newArray = [];
+ var indexToStart = 0;
+ if(optionalBegin && typeof optionalBegin === "number"){
+   indexToStart = optionalBegin;
+   if(optionalBegin < 0){
+   indexToStart = array.length + optionalBegin;
+ }
+ }
+ var indexToEnd = array.length;
+ if(optionalEnd < array.length && typeof optionalEnd === "number"){
+   indexToEnd = optionalEnd;
+ }
+ if(optionalEnd < 0){
+  indexToEnd = array.length + optionalEnd;
+ }
+ for (var i = indexToStart; i < indexToEnd; i++){
+  newArray.push(array[i]);
+ }
+ return newArray;
+};
+tests({
+  'It should return a copy of the original array.': function() {
+    var arr = [1, 2, 3];
+    var result = slice(arr);
+    eq(result.length === 3, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+    eq(result[2] === 3, true);
+  },
+  'It should not mutate the orignal array which is passed.': function() {
+    var arr = [1, 2, 3];
+    var result = slice(arr);
+    result.push(4);
+    eq(arr.length === 3, true);
+    eq(arr[3] === undefined, true);
+  },
+  'It should pass optionalBegin as the second argument and optionalBegin indicates what index to start the copy from.': function() {
+    var result = slice([1,2,3], 1);
+    eq(result.length === 2, true);
+    eq(result[0] === 2, true);
+    eq(result[1] === 3, true);
+  },
+  'If optionalBegin is ommited, slice begins to copy at index 0.': function() {
+    var result = slice([1,2]);
+    eq(result.length === 2, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+  },
+  'If optionalBegin is a negative number, it will offset from the end of the array': function() {
+    var result = slice([1, 2, 3], -2);
+    eq(result.length === 2, true);
+    eq(result[0] === 2, true);
+    eq(result[1] === 3, true);
+  },
+  'If begin is greater than the length of the sequence, an empty array is returned.': function() {
+    var result = slice([1, 2, 3], 4);
+    eq(result.length === 0, true);
+  },
+  'It should pass optionalEnd as the third argument and optionalEnd indicates the index before which to end the copy.': function() {
+    var result = slice([1, 2, 3], 0, 2);
+    eq(result.length === 2, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+  },
+  'A negative optionalEnd can be used, indicating an offset from the end of the array.': function() {
+    var result = slice([1, 2, 3, 4], 0, -2);
+    eq(result.length === 2, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+  }, 
+  'If optionalEnd is omitted, slice copies through the end of the sequence (arr.length).': function() {
+    var result = slice([1, 2, 3, 4], 1);
+    eq(result.length === 3, true);
+    eq(result[0] === 2, true);
+    eq(result[1] === 3, true);
+    eq(result[2] === 4, true);
+  },
+  'If optionalEnd is greater than array.length, slice copies through to the end of the array.': function() {
+    var result = slice([1, 2, 3, 4], 1, 100);
+    eq(result.length === 3, true);
+    eq(result[0] === 2, true);
+    eq(result[1] === 3, true);
+    eq(result[2] === 4, true);
+  },
+  'It copies object references into the new array.': function() {
+    var lady = {name: 'blanca', age: 32};
+    var arr = [1, lady];
+    var result = slice(arr);
+    eq(result.length === 2, true);
+  },
+  'If a referenced object changes, the changes are visible to both the new and original arrays.': function() {
+    var myHonda = { color: 'red', wheels: 4, engine: { cylinders: 4, size: 2.2 } };
+    var myCar = [myHonda, 2, 'cherry condition', 'purchased 1997'];
+    var newCar = slice(myCar, 0, 2);
+    myHonda.color = 'purple';
+    eq(myCar[0].color === 'purple', true);
+    eq(newCar[0].color === 'purple', true)
+  },
+  'For strings, numbers and booleans, it copies the values into a new array. Changes to the string, number or boolean in the original array do not affect the other new array.': function() {
+    var originalArr = ['blanca', 32, true];
+    var newArr = slice(originalArr);
+    originalArr[0] = 'guadalupe';
+    eq(newArr[0] === 'blanca', true)
+  },
+  'For strings, numbers and booleans, it copies the values into a new array. Changes to the string, number or boolean in the new array do not affect the other original array.': function() {
+    var originalArr = ['blanca', 32, true];
+    var newArr = slice(originalArr);
+    newArr[0] = 'guadalupe';
+    eq(originalArr[0] === 'blanca', true)
+  },
+  'slice argumentsmethod can also be called to convert Array-like objects / collections to a new Array.': function(){
+    function list() {
+    return slice(arguments);
+    }
+    var result = list(1, 2, 3); // [1, 2, 3]
+    eq(result.length === 3, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+    eq(result[2] === 3, true);
+  },
+  'If optionalBegin is not a number, then optionalBegin is set to 0.': function() {
+  var result = slice([1,2], []);
+    eq(result.length === 2, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+  },
+  'If optionalEnd is not a number, then optionalEnd is set to array.length.': function() {
+  var result = slice([1,2], 0, []);
+    eq(result.length === 2, true);
+    eq(result[0] === 1, true);
+    eq(result[1] === 2, true);
+}
+
+});
+</script>
