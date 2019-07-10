@@ -16,14 +16,22 @@ function join(array, optionalSeperator) {
   if (array.length === 0){
     return newString;
   }
-  if(optionalSeperator || optionalSeperator !== undefined){
+  if(optionalSeperator || optionalSeperator === ''){
     seperator = `${optionalSeperator}`;
   }
   for (var i = 0; i < array.length-1; i++){
-   newString = newString+ array[i]+ seperator;
+    if (array[i]=== null || array[i] === undefined){
+      newString = newString + ''+ seperator;
+    } else {
+      newString = newString+ array[i]+ seperator;
+    }
   }
   for (var i = array.length-1; i < array.length; i++){
-   newString = newString+ array[i];
+    if (array[i]=== null || array[i] === undefined){
+      newString = newString + '';
+    } else{
+      newString = newString + array[i];
+    }
   }
   return newString;
 }
@@ -59,9 +67,9 @@ tests({
     var result = list(1, 2, 3);
     eq(result, '1,2,3');
   },
-  'If an array is passed in as the optionalSeperator, it will place the array in between each element of the original array.': function() {
-    var result = join(['I', 'am', 'Blanca'],'[1,2,3]');
-    eq(result, 'I[1,2,3]am[1,2,3]Blanca');
+  'If an array is passed in as the optionalSeperator, it extract the elements of the array and place the array in between each element of the original array.': function() {
+    var result = join(['I', 'am', 'Blanca'],[1,2,3]);
+    eq(result, 'I1,2,3am1,2,3Blanca');
   },
   'If a boolean is passed in as the optionalSeperator, it will insert the bolean will be between each element of the array.': function() {
     var result = join(['I', 'am', 'Blanca'],true);
@@ -74,6 +82,10 @@ tests({
   'If a number is passed as the optionalSeperator, it will insert the number in between each element of the orignal array.': function() {
     var result = join(['I', 'am', 'Blanca'],32);
     eq(result, 'I32am32Blanca');
+  },
+  '`Null` or `undefined` values in the array should be converted to an empty string in the returned string.': function () {
+    var result = join([null, , undefined]);
+    eq(result, ',,');
   }
 });
 </script>

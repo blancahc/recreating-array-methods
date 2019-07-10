@@ -9,12 +9,101 @@
 //Return value: 
   //The new length property of the object upon which the method was called.
 function push(array /*[,elementN]*/){
+  //if the element to push on is other than an array
+  if (typeof array === 'number' || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
+    throw new TypeError(`${array} .push is not a function`)
+    console.log(TypeError);
+  }
+  else if (array === null || array === undefined) {
+    throw new TypeError(`cannot read property .push of ${array}`)
+  }
+  else if(array instanceof Array === false){
+    if(!array.length){
+      array.length = 0;
+    }
+    for (i = 1; i < arguments.length; i++){
+      //if argument passed to non-array is an array
+    if(arguments[i] instanceof Array){
+      for (var k = 0; k < arguments[i].length; k++){
+        array[array.length] = arguments[i][k];
+        array.length++;
+      }
+    } else{
+      //if argument passed to non-array is other than an array
+      array[array.length] = arguments[i];
+      array.length++;
+    }
+  }
+  //if the argument to push on is an array  
+  } else {
   for (i = 1; i < arguments.length; i++){
-    array[array.length] = arguments[i];
+    if(arguments[i] instanceof Array){
+      for (var j = 0; j < arguments[i].length; j++){
+        array[array.length] = arguments[i][j];
+      }
+    } else{
+      array[array.length] = arguments[i];
+    }
+  }
   }
   return array.length;
 };
+
 tests({
+  'If the element to append to is a number, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push(1, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to append to is a function, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push(function() {}, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to append to is a string, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push('blanca', 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to append to is a boolean, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push(true, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to append to is null, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push(null, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to append to is undefined, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      push(undefined, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
   'It should return the array.length.': function() {
     var result = push([1], 2, 3);
     eq(result, 3);
@@ -27,5 +116,38 @@ tests({
     eq(array[2], 3);
     eq(result, 3);
   },
+  'If the argument to append is anotherArray, it should recurse the anotherArray  and append each element of the anotherArray to the originalArray.': function() {
+    var array = [1];
+    var anotherArray = [2,3]
+    var result = push(array, anotherArray);
+    eq(array[0], 1);
+    eq(array[1], 2);
+    eq(array[2], 3);
+    eq(result, 3);
+  },
+  'If the length property of the original array or object is undefined, the length property should be created and set to 0.': function () {
+      var testObject = {
+        0: 0
+      }
+      eq(testObject.length, undefined);
+      push(testObject);
+      eq(testObject.length, 0);
+    },
+    'It can append to array-like objects': function() {
+      var testObject = {
+        0: 1, 
+        length: 1
+      }
+      var result = push(testObject, 2);
+      eq(testObject[1], 2);
+      eq(result, 2);
+    },
+    'If the length of the object is undefined, the length property should be created and set to 0.': function () {
+      var testObject = {
+      }
+      eq(testObject.length, undefined);
+      push(testObject);
+      eq(testObject.length, 0);
+    }
 });
 </script>
