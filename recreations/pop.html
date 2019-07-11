@@ -1,6 +1,6 @@
 <script src="../simpletest.js"></script>
 <script>
-//Function prototype:
+
 function pop(array) {
   if (typeof array === 'number' || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
     throw new TypeError(`${array} .pop is not a function`)
@@ -8,26 +8,22 @@ function pop(array) {
   if (array === null || array === undefined) {
     throw new TypeError(`cannot read property .pop of ${array}`)
   }
-//return undefined if no array.length
-if(!array.length){
-  return undefined;
-}
-//save the array elements so that the last element can be returned 
-var arrayElements = [];
-for (var i = 0; i < array.length; i++) {
-  arrayElements.push(array[i]);
-}
-//line 15 is unecessary for arrays, because line 16 will delete the last element in the array, but it is necessary for objects.  
+  //return undefined if no array.length
+  if(!array.length){
+    return undefined;
+  }
+  deletedElement = array[array.length-1];
+  //line 15 is unecessary for arrays, because line 16 will delete the last element in the array, but it is necessary for objects.  
   delete array[array.length-1];
   array.length = array.length-1;
-return arrayElements[arrayElements.length-1];
+  return deletedElement;
 }
 
 tests({
   'If the element to pop on is a number, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(1)
+      pop(1);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
@@ -36,7 +32,7 @@ tests({
   'If the element to pop on is a function, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(function() {}, 2)
+      pop(function() {}, 2);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
