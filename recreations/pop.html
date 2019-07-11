@@ -1,0 +1,118 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function prototype:
+function pop(array) {
+  if (typeof array === 'number' || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
+    throw new TypeError(`${array} .pop is not a function`)
+  }
+  if (array === null || array === undefined) {
+    throw new TypeError(`cannot read property .pop of ${array}`)
+  }
+//return undefined if no array.length
+if(!array.length){
+  return undefined;
+}
+//save the array elements so that the last element can be returned 
+var arrayElements = [];
+for (var i = 0; i < array.length; i++) {
+  arrayElements.push(array[i]);
+}
+//line 15 is unecessary for arrays, because line 16 will delete the last element in the array, but it is necessary for objects.  
+  delete array[array.length-1];
+  array.length = array.length-1;
+return arrayElements[arrayElements.length-1];
+}
+
+tests({
+  'If the element to pop on is a number, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop(1)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to pop on is a function, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop(function() {}, 2)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to pop on is a string, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop('blanca')
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to pop on to is a boolean, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop(true)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to pop on is null, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop(null)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to pop on is undefined, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      pop(undefined)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+'It should remove the last element from the passed original array and return the removed element.': function() {
+  var originalArray = [1, 2, 3];
+  var result = pop(originalArray);
+  eq(result, 3);
+  eq(originalArray[0], 1);
+  eq(originalArray[1], 2);
+  eq(originalArray[2], undefined);
+}, 
+'It should also pop in an array with strings.':function() {
+  var plants = ['broccoli', 'cauliflower', 'cabbage', 'kale', 'tomato'];
+  var result = pop(plants);
+  eq(result, 'tomato');
+},
+'It should returned undefined if the passed array is empty.': function() {
+  var result = pop([]);
+  eq(result, undefined);
+},
+'It can pop on array-like objects': function() {
+      var testObject = {
+        0: 1,
+        1: 2,
+        length: 2
+      }
+      var result = pop(testObject);
+      eq(testObject[0], 1);
+      eq(testObject[1], undefined);
+      eq(result, 2);
+},
+'If the passed object does not have a defined length, it will return undefined and not pop on the object.': function() {
+  var testObject = {
+        0: 1,
+        1: 2,
+      }
+      var result = pop(testObject);
+      eq(result, undefined);
+}
+});
+</script>

@@ -12,7 +12,6 @@ function push(array /*[,elementN]*/){
   //if the element to push on is other than an array
   if (typeof array === 'number' || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
     throw new TypeError(`${array} .push is not a function`)
-    console.log(TypeError);
   }
   else if (array === null || array === undefined) {
     throw new TypeError(`cannot read property .push of ${array}`)
@@ -141,13 +140,6 @@ tests({
       var result = push(testObject, 2);
       eq(testObject[1], 2);
       eq(result, 2);
-    },
-    'If the length of the object is undefined, the length property should be created and set to 0.': function () {
-      var testObject = {
-      }
-      eq(testObject.length, undefined);
-      push(testObject);
-      eq(testObject.length, 0);
     }
 });
 </script>

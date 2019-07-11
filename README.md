@@ -21,7 +21,7 @@ This is an exercise for the Watch and Code testing series.
 10. Done - Array.prototype.slice
 11. Done - Array.prototype.join
 12. Done - Array.prototype.push
-13. Array.prototype.pop
+13. Done - Array.prototype.pop
 14. Array.prototype.shift
 15. Array.prototype.unshift
 16. Array.prototype.fill
