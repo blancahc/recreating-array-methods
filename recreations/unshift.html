@@ -1,0 +1,157 @@
+<script src="../simpletest.js"></script>
+<script>
+//Function prototype: 
+// function shift(arr) {
+// var deletedElement = arr[0];
+// for (i=0; i<arr.length; i++){
+//  arr[i] = arr[i+1];
+// }
+//  arr.length = arr.length-1;
+//  return deletedElement;
+// }
+function unshift(array, element){
+  if (typeof array == 'number'|| typeof array === "null" || typeof array === undefined || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
+    throw new TypeError(`Cannot read property 'unshift' of ${array}`);
+  }
+  if(!array.length){
+    throw new SyntaxError(`Invalid or unexpected token`);
+  }
+  //first save a copy of an array.
+  //loop through copy and set originalArray[1]+ to the subsequent elements of copy. 
+  var newArr= [];
+  for (var k = 0; k < array.length; k++){
+    newArr.push(array[k]);
+  }
+  var arrayIndex = 0;
+  for( var i = 1; i < arguments.length; i++){
+    array[arrayIndex] = arguments[i];//array[0] = 1; [1,3,4]
+    arrayIndex++;
+  }
+  for (j = 0; j < newArr.length; j++){
+  array[arrayIndex] = newArr[j]; 
+  arrayIndex++;
+    if(!(array instanceof Array)){
+      array.length++;
+    }
+  }
+  return array.length;
+}
+
+tests({
+  'If you pass a single element to the originalArray, it will add that element to the front of the originalArray, push the rest of the elements one index to the right, and return the new length.': function() {
+    var numbers = [2,3,4];
+    result = unshift(numbers, 1);
+    eq(result, 4);
+    eq(numbers[0], 1);
+    eq(numbers[1], 2);
+    eq(numbers[2], 3);
+    eq(numbers[3], 4);
+  },
+  'If more than one element, it will add the elements in the order they are passed in to the beginning of the originalArray, push the rest of the elements one index to the right, and return the new length.': function() {
+    var colors = ['green', 'blue'];
+    var result = unshift(colors,'purple', 'pink');
+    eq(result, 4);
+    eq(colors[0], 'purple');
+    eq(colors[1], 'pink');
+    eq(colors[2], 'green');
+    eq(colors[3], 'blue');
+  },
+  'If the argument to add is an array the array will be added in a single index to the beginning of the originalArray, push the rest of the elements one index to the right, and return the new length.': function() {
+    var children = ['Gael', 'Aaron'];
+    result = unshift(children,['Diego', 'Abby']);
+    eq(result, 3);
+    eq(children[0], 'Diego,Abby');
+    eq(children[1], 'Gael');
+    eq(children[2], 'Aaron');
+  },
+  'If the argument to add is an empty string, the empty string will be added to the beginning of the originalArray, push the rest of the elements one index to the right, and return the new length.': function() {
+    var children = ['Gael', 'Aaron'];
+    result = unshift(children, '');
+    eq(result, 3);
+    eq(children[0], '');
+    eq(children[1], 'Gael');
+    eq(children[2], 'Aaron');
+  },
+  'If the argument to add is missing, nothing will be added to the originalArray and it will return the original length.': function() {
+    var children = ['Gael', 'Aaron'];
+    result = unshift(children);
+    eq(result, 2);
+    eq(children[0], 'Gael');
+    eq(children[1], 'Aaron');
+  },
+  'If the element to shift on is a number, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift(1);
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to unshift on is a function, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift(function() {}, 2);
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to unshift on is a string, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift('blanca');
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to shift on to is a boolean, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift(true);
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to unshift on is null, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift(null);
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  'If the element to unshift on is undefined, return a TypeError': function() {
+    var isTypeError = false;
+    try{
+      unshift(undefined)
+    }catch(e) {
+      isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+'If the originalArray is empty, and no element is passed in, it will return 0.': function() {
+  result = [].unshift()
+  eq(result, 0);
+},
+'If the originalArray is empty, and an element is passed in, it will return 1 and the element will be added.': function() {
+  array = [];
+  result = array.unshift(2)
+  eq(result, 1);
+  eq(array[0], 2);
+},
+'It can unshift on array-like objects': function() {
+  var testObject = {
+    0: 1,
+    length: 1
+  }
+  var result = unshift(testObject, 0);
+  eq(testObject[0], 0);
+  eq(testObject[1], 1);
+  eq(result, 2);
+}
+});
+</script>

@@ -1,112 +1,122 @@
 <script src="../simpletest.js"></script>
 <script>
-
-function pop(array) {
+//Function prototype: 
+// function shift(arr) {
+// var deletedElement = arr[0];
+// for (i=0; i<arr.length; i++){
+//  arr[i] = arr[i+1];
+// }
+//  arr.length = arr.length-1;
+//  return deletedElement;
+// }
+function shift(array){
   if (typeof array === 'number' || typeof array === 'function'|| typeof array === 'string' || typeof array === 'boolean'){
     throw new TypeError(`${array} .pop is not a function`)
   }
   if (array === null || array === undefined) {
     throw new TypeError(`cannot read property .pop of ${array}`)
   }
-  //return undefined if no array.length
   if(!array.length){
     return undefined;
   }
-  deletedElement = array[array.length-1];  
-  delete array[array.length-1];
+  var deletedElement = array[0];
+  for (i=0; i<array.length; i++){
+  array[i] = array[i+1];
+  }
   array.length = array.length-1;
   return deletedElement;
 }
 
 tests({
-  'If the element to pop on is a number, return a TypeError': function() {
+  'If the element to shift on is a number, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(1);
+      shift(1);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-  'If the element to pop on is a function, return a TypeError': function() {
+  'If the element to shift on is a function, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(function() {}, 2);
+      shift(function() {}, 2);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-  'If the element to pop on is a string, return a TypeError': function() {
+  'If the element to shift on is a string, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop('blanca')
+      shift('blanca');
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-  'If the element to pop on to is a boolean, return a TypeError': function() {
+  'If the element to shift on to is a boolean, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(true)
+      shift(true);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-  'If the element to pop on is null, return a TypeError': function() {
+  'If the element to shift on is null, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(null)
+      shift(null);
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-  'If the element to pop on is undefined, return a TypeError': function() {
+  'If the element to shift on is undefined, return a TypeError': function() {
     var isTypeError = false;
     try{
-      pop(undefined)
+      shift(undefined)
     }catch(e) {
       isTypeError = e instanceof TypeError;
     }
     eq(isTypeError, true);
   },
-'It should remove the last element from the passed original array and return the removed element.': function() {
-  var originalArray = [1, 2, 3];
-  var result = pop(originalArray);
-  eq(result, 3);
-  eq(originalArray[0], 1);
-  eq(originalArray[1], 2);
-  eq(originalArray[2], undefined);
+'It should remove the first element from the passed original array and return the removed element.': function() {
+  var originalArray = [1, 2, 3, 4];
+  var result = shift(originalArray);
+  eq(result, 1);
+  eq(originalArray[0], 2);
+  eq(originalArray[1], 3);
+  eq(originalArray[2], 4);
+  eq(originalArray.length, 3);
 }, 
 'It should also pop in an array with strings.':function() {
   var plants = ['broccoli', 'cauliflower', 'cabbage', 'kale', 'tomato'];
-  var result = pop(plants);
-  eq(result, 'tomato');
+  var result = shift(plants);
+  eq(result, 'broccoli');
 },
-'It should returned undefined if the passed array is empty.': function() {
-  var result = pop([]);
+'It should return undefined if the passed array is empty.': function() {
+  var result = shift([]);
   eq(result, undefined);
 },
 'It can pop on array-like objects': function() {
-      var testObject = {
-        0: 1,
-        1: 2,
-        length: 2
-      }
-      var result = pop(testObject);
-      eq(testObject[0], 1);
-      eq(testObject[1], undefined);
-      eq(result, 2);
+  var testObject = {
+    0: 1,
+    1: 2,
+    length: 2
+  }
+  var result = shift(testObject);
+  eq(testObject[0], 2);
+  eq(testObject[1], undefined);
+  eq(result, 1);
 },
 'If the passed object does not have a defined length, it will return undefined and not pop on the object.': function() {
   var testObject = {
         0: 1,
         1: 2,
       }
-      var result = pop(testObject);
+      var result = shift(testObject);
       eq(result, undefined);
 }
 });
