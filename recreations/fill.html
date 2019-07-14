@@ -1,0 +1,166 @@
+<script src="../simpletest.js"></script>
+<script>
+  function fill(array, element, optionalStart, optionalEnd) {
+    if(array.length === 0){
+      return array;
+    }
+    if(!optionalStart || typeof optionalStart !== 'number'){
+      var optionalStart = 0;
+    }
+    if(optionalStart < 0){
+      optionalStart = array.length + optionalStart;
+    }
+    if (typeof optionalEnd === 'array' && optionalEnd.length === 1){
+      optionalEnd === optionalEnd[0];
+    }
+    if(!optionalEnd || optionalEnd > array.length){
+      optionalEnd = array.length;
+    } 
+    if(optionalEnd < 0 || typeof optionalEnd === 'array'){
+      optionalEnd = array.length + optionalEnd;
+    }
+    for (var i = optionalStart; i < optionalEnd; i++){
+      array[i]= element;
+    }
+    return array;
+  };
+  tests({
+    'If optionalStart, it will start replacing the values of the array at optionalStart index and return the originalArray with the mutated values.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 0, 1);
+      eq(result, numbers);
+      eq(numbers.length, 3);
+      eq(numbers[0], 1);
+      eq(numbers[1], 0);
+      eq(numbers[2], 0);
+    },
+    'If no optionalStart, it will start replacing the value at index 0.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 0);
+      eq(numbers.length, 3);
+      eq(numbers[0], 0);
+      eq(numbers[1], 0);
+      eq(numbers[2], 0);
+    },
+    'If optionalStart, is not a number, it will convert it to a zero.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 0, 'purple', 2);
+      eq(numbers.length, 3);
+      eq(numbers[0], 0);
+      eq(numbers[1], 0);
+      eq(numbers[2], 3);
+    },
+    'If optionalStart is negative, it is treated as array.length + start.': function() {
+      var myArray = [1, 2, 3, 4];
+      fill(myArray, 5, -3);
+      eq(myArray.length, 4);
+      eq(myArray[0], 1);
+      eq(myArray[1], 5);
+      eq(myArray[2], 5);
+      eq(myArray[3], 5);
+    },
+    'If optionalStart is larger than the array.length, return the original array unchanged.': function() {
+      result = fill([1], 'try', 100);
+      eq(result.length, 1);
+      eq(result[0], 1);
+    },
+    'If the absolute value of negative optionalStart is larger than the array.length, then replace all values of the original array. ': function() {
+      result = fill([1, 2, 3], 'try', -100);
+      eq(result.length, 3);
+      eq(result[0], 'try');
+      eq(result[1], 'try');
+      eq(result[2], 'try');
+    },
+    'If optionalEnd, it will end replacing the value at before optionalEnd index.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 'x', 0, 2);
+      eq(numbers.length, 3);
+      eq(numbers[0], 'x');
+      eq(numbers[1], 'x');
+      eq(numbers[2], 3);
+    },
+    'If optionalEnd is an object, it will return the original array unchanged.': function() {
+      var numbers = [1, 2, 3]
+      result = fill(numbers, 'x', 0, {});
+      eq(numbers.length, 3);
+      eq(numbers[0], 1);
+      eq(numbers[1], 2);
+      eq(numbers[2], 3);
+    },
+    'If optionalEnd is set to `true`, then optionalEnd will equal one.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 'x', 0, true);
+      eq(numbers.length, 3);
+      eq(numbers[0], 'x');
+      eq(numbers[1], 2);
+      eq(numbers[2], 3);
+    },
+    'If optionalEnd is set to `true`, then optionalEnd will equal one.': function() {
+      var numbers = [1, 2, 3];
+      result = fill(numbers, 'x', 0, true);
+      eq(numbers.length, 3);
+      eq(numbers[0], 'x');
+      eq(numbers[1], 2);
+      eq(numbers[2], 3);
+    },
+    'If no optionalEnd, it will replace all values.': function() {
+      var myArray = ['I', 'am', 'Santa'];
+      fill(myArray, 'ho', 0);
+      eq(myArray.length, 3);
+      eq(myArray[0], 'ho');
+      eq(myArray[1], 'ho');
+      eq(myArray[2], 'ho');
+    },
+    'If optionalEnd is greater than array.length, it will replace through the end of the array and not add any.': function() {
+      var myArray = ['I', 'am', 'Santa'];
+      fill(myArray, 'ho', 1, 100);
+      eq(myArray.length, 3);
+      eq(myArray[0], 'I');
+      eq(myArray[1], 'ho');
+      eq(myArray[2], 'ho');
+    },
+    'If optionalEnd is negative, it is treated as length+end.': function() {
+      var myArray = [1, 2, 3, 4];
+      fill(myArray, 5, -3, -1);
+      eq(myArray.length, 4);
+      eq(myArray[0], 1);
+      eq(myArray[1], 5);
+      eq(myArray[2], 5);
+      eq(myArray[3], 4);
+    },
+    'If the absolute value of negative optionalEnd is larger than the array.length, it will return the original array unchanged.': function() {
+      var myArray = [1, 2, 3, 4];
+      fill(myArray, 'me', 0, -100);
+      eq(myArray.length, 4);
+      eq(myArray[0], 1);
+      eq(myArray[1], 2);
+      eq(myArray[2], 3);
+      eq(myArray[3], 4);
+    },
+    'When fill gets passed an object, it will copy the reference and fill the array with references to that object.': function() {
+    var myHonda = { color: 'red', year: 1986 } ;
+    var myArr = [1, 2, 3];
+    fill(myArr, myHonda, 0);
+    eq(myArr[0], myHonda);
+    },
+  'If the array is empty, and an element to replace is passed in, it will return the empty array.': function() {
+    var myArray = [];
+    fill(myArray, 1);
+    eq(myArray.length, 0);
+    eq(myArray[0], undefined);
+  },
+  'It can `fill` on array-like objects': function() {
+    var testObject = {
+      0: 1,
+      1: 2,
+      2: 3,
+      length: 3
+    }
+    fill(testObject, 'changed', 1, 3);
+    eq(testObject[0], 1);
+    eq(testObject[1], 'changed');
+    eq(testObject[2], 'changed');
+    eq(result.length, 3);
+  }
+});
+</script>

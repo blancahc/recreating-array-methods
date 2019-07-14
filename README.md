@@ -24,7 +24,7 @@ This is an exercise for the Watch and Code testing series.
 13. Done - Array.prototype.pop
 14. Done - Array.prototype.shift
 15. Done - Array.prototype.unshift
-16. Array.prototype.fill
+16. Done - Array.prototype.fill
 17. Array.prototype.reverse
 18. Array.prototype.copyWithin
 19. Array.prototype.sort
