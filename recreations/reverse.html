@@ -1,0 +1,159 @@
+<script src="../simpletest.js"></script>
+<script>
+//FUNCTION PROTOTYPE:
+function reverse(array) {
+  if (!(array instanceof Object) || array instanceof Function){
+    throw new SyntaxError('Invalid or unexpected token')
+  }
+  for (var i = 0; i < (array.length -1)/2; i++){
+    var lastIndex = array.length -1;
+    var iInArray = i in array;
+    var endInArray = (lastIndex - i) in array;
+    var tempValue = array[i];
+
+    if (endInArray){
+      array[i] = array[lastIndex - i];
+    } else {
+      delete array[i];
+    }
+    if(iInArray){
+      array[lastIndex - i] = tempValue;
+    } else {
+      delete array[lastIndex - i];
+    }
+  }
+  return array;
+}
+tests({
+'It should return an array.': function() {
+  var result = reverse([]);
+  eq(result instanceof Array, true);
+},
+'It should return the elements of the original array in reverse order.': function() {
+  var result = reverse([1, 2, 3]);
+  eq(JSON.stringify(result), "[3,2,1]");
+},
+'It should mutate and return the orignal array which is passed.': function() {
+  var originalArray = [2, 3];
+  result = reverse(originalArray);
+  eq(result, originalArray);
+  eq(originalArray[0], 3);
+  eq(originalArray[1], 2);
+},
+'It should not skip empty values.': function() {
+var result = reverse([1, ,2, ,4]);
+  eq(result.length, 5);
+},
+'The empty values should show empty in the reverse order': function() {
+  var arr = [null, undefined, , 'blanca']
+  var result = reverse(arr);
+  console.log(result);
+  eq(result.length, 4);
+  eq(result[0], 'blanca');
+  eq(1 in result, false);
+  eq(result[2], undefined);
+  eq(result[3], null);
+},
+'If the array is empty, return the empty array': function() {
+  var arr = [];
+  var result = reverse(arr);
+  eq(JSON.stringify(result), '[]');
+},
+'It can be called or applied to objects resembling arrays. ': function() {
+  var testObject = {
+        0: 1,
+        1: 2,
+        2: 3, 
+        length: 3
+      }
+      var result = reverse(testObject);
+      eq(result[0], 3);
+      eq(result[1], 2);
+      eq(result[2], 1);
+},
+'Objects which do not contain a length property reflecting the last in a series of consecutive, zero-based numerical properties may not behave in any meaningful manner.': function() { 
+  var testObject = {
+        0: 1,
+        1: 2,
+        2: 3
+}
+      var result = reverse(testObject);
+      eq(result[0], 1);
+      eq(result[1], 2);
+      eq(result[2], 3);
+},
+'If a string is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse('I am a string')
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a number is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(2)
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a boolean is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(true)
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a boolean is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(true)
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a `undefined` is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(undefined);
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a null is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(null)
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a `NaN` is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(null)
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+},
+'If a function is passed as `array`, return Syntax Error.': function() {
+  var isSyntaxError = false;
+  try{
+    reverse(function(){})
+  }catch(e){
+    isSyntaxError = (e instanceof SyntaxError); 
+  }
+  eq(isSyntaxError, true);
+}
+});
+
+</script>
