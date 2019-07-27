@@ -1,0 +1,193 @@
+<script src="../simpletest.js"></script>
+<script>
+
+function sort(array, optionalCompareFn) {
+  var arrCopy = [];
+  var smallestIndex;
+  var originalLength = array.length;
+  var originalArray = array.slice();
+for (var h = 0; h < originalLength; h++){
+  //first make arrCopy[h] equal to the next array[0+], which it's not undefined
+  var m = 0; 
+  while (array[m] === undefined && m < array.length){
+    m++;
+  }
+  arrCopy[h]= (array[m]);
+  smallestIndex = m;
+  var i = 1; 
+  while (array[i] === undefined && i < array.length){
+    i++;
+  }
+  for (i; i < array.length ; i++){
+    //if there's no optionalCompare Fn, then convert the values to string when comparing them
+    if(arguments.length === 1){
+    if((array[i]).toString() < (arrCopy[h]).toString()){
+      arrCopy[h] = array[i];
+      smallestIndex = i;
+    }
+    }
+    //if there's an optionalCompare Fn, then don't convert the values to string when comparing them
+    if(arguments.length === 2){
+    if((array[i]) < (arrCopy[h])){
+      arrCopy[h] = array[i];
+      smallestIndex = i;
+    }
+    }
+  }
+  array.splice(smallestIndex, 1);
+}
+
+if(arguments.length === 1){
+  return array = arrCopy;
+}
+if(arguments.length === 2) {
+  var result = 0;
+
+for (var l = 0; l < arrCopy.length; l++){
+  result += optionalCompareFn(arrCopy[i], arrCopy[i+1]);
+}
+  if (result > 0 ){
+  return array = arrCopy.reverse()
+}
+if(result < 0){
+  return array = arrCopy;
+}
+else {
+  return originalArray;
+}
+}
+}
+
+tests({
+  'It will return an array.': function() {
+    var result = sort([]);
+    eq(result instanceof Array, true);
+  },
+    'The default sort order is built upon converting the elements into strings, then comparing their sequences of UTF-16 code units values.': function() {
+      var numbers = [3, 11,-1, 5]
+      result = sort(numbers);
+      eq(result.length, 4);
+      eq(result[0], -1);
+      eq(result[1], 11);
+      eq(result[2], 3);
+      eq(result[3], 5);
+    },
+    'If the array has numbers and strings, the numbers will come before the strings.': function() {
+      result = sort(['blanca', 32, 'hernandez', 5]);
+      eq(result.length, 4);
+      eq(result[0], 32);
+      eq(result[1], 5);
+      eq(result[2], 'blanca');
+      eq(result[3], 'hernandez');
+    }, 
+  'All undefined elements in the array will be sorted to the end.': function() {
+    result = sort(['blanca', undefined, 'zebra',32,]);
+      eq(result.length, 4);
+      eq(result[0], 32);
+      eq(result[1], 'blanca');
+      eq(result[2], 'zebra');
+      eq(result[3], undefined);
+    },
+    'An empty string will come at the beginning of the sorted array.': function() {
+      result = sort(['blanca', '', 'zebra',32,]);
+      eq(result.length, 4);
+      eq(result[0], '');
+      eq(result[1], 32);
+      eq(result[2], 'blanca');
+      eq(result[3], 'zebra');
+    },
+    'For numbers, if optionalCompareFn returns negative, the array will be in ascending order, and the numbers will be in true ascending order (they will not be compared as strings).': function(){
+      function myCompareFn(a, b) {
+        return a - b;
+      }
+      result = sort([32, 5, 1, 200], myCompareFn);
+      console.log(result)
+      eq(result.length, 4);
+      eq(result[0], 1);
+      eq(result[1], 5);
+      eq(result[2], 32);
+      eq(result[3], 200);
+    },
+    'For numbers, if optionalCompareFn returns positive, the array will be in descending order, and the numbers will be in true ascending order (they will not be compared as strings).': function(){
+      function myCompareFn(a, b) {
+        return b - a;
+      }
+      result = sort([32, 5, 1, 200], myCompareFn);
+      console.log(result)
+      eq(result.length, 4);
+      eq(result[0], 200);
+      eq(result[1], 32);
+      eq(result[2], 5);
+      eq(result[3], 1);
+    },
+    'For strings, if optionalCompareFn returns negative, the array will be in ascending order, and the numbers will be in true ascending order (they will not be compared as strings).': function(){
+      function myCompareFn(a, b) {
+        return -1;
+      }
+      result = sort(['blanca', 'luis', 'gael', 'aaron'], myCompareFn);
+      console.log(result)
+      eq(result.length, 4);
+      eq(result[0], 'aaron');
+      eq(result[1], 'blanca');
+      eq(result[2], 'gael');
+      eq(result[3], 'luis');
+    },
+    'For strings, if optionalCompareFn returns positive, the array will be in descending order, and the numbers will be in true ascending order (they will not be compared as strings).': function(){
+      function myCompareFn(a, b) {
+        return 1;
+      }
+      result = sort(['blanca', 'luis', 'gael', 'aaron'], myCompareFn);
+      console.log(result)
+      eq(result.length, 4);
+      eq(result[0], 'luis');
+      eq(result[1], 'gael');
+      eq(result[2], 'blanca');
+      eq(result[3], 'aaron');
+    },
+    'If optionalCompareFn returns 0, the array will not be sorted.': function(){
+      function myCompareFn(a, b) {
+        return 0;
+      }
+      result = sort(['blanca', '', 'zebra', 32, 5], myCompareFn);
+      console.log(result)
+      eq(result.length, 5);
+      eq(result[0], 'blanca');
+      eq(result[1], '');
+      eq(result[2], 'zebra');
+      eq(result[3], 32);
+      eq(result[4], 5);
+    },
+    'If optionalCompareFn returns NaN, then leave the array alone.': function() {
+      function myCompareFn(a, b) {
+        return a - b;
+      }
+      result = sort(['blanca', '', 'zebra',32,5], myCompareFn);
+      console.log(result)
+      eq(result.length, 5);
+      eq(result[0], 'blanca')
+      eq(result[1], '');
+      eq(result[2], 'zebra');
+      eq(result[3], 32);
+      eq(result[4], 5);
+    },
+    'Objects can be sorted, given the value of one of their properties.': function() {
+      var items = [
+        { name: 'Edward', value: 21 },
+        { name: 'Sharpe', value: 37 },
+        { name: 'And', value: 45 },
+        { name: 'The', value: -12 },
+        { name: 'Magnetic', value: 13 },
+      ];
+      result = items.sort(function (a, b) {
+        return a.value - b.value;
+      });
+      console.log(result)
+      eq(result.length, 5);
+      eq(result[0].value, -12)
+      eq(result[1].value, 13);
+      eq(result[2].value, 21);
+      eq(result[3].value, 37);
+      eq(result[4].value, 45);
+    }
+});
+</script>

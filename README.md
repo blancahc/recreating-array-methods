@@ -27,5 +27,5 @@ This is an exercise for the Watch and Code testing series.
 16. Done - Array.prototype.fill
 17. Done - Array.prototype.reverse
 18. Done - Array.prototype.copyWithin
-19. Array.prototype.sort
+19. Done - Array.prototype.sort
 20. Array.prototype.splice
