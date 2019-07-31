@@ -1,0 +1,195 @@
+<script src="../simpletest.js"></script>
+<script>
+function splice(array, start, optionalDeleteCount, item1, item2){
+  //if no `start`
+  if(arguments.length === 1){
+    return [];
+  }
+  if(start > array.length){
+    start = array.length;
+  }
+  if(start < 0){
+    start = array.length + start;
+  }
+  if(start < 0 && ((start * (-1)) < array.length)){
+    start = 0; 
+  }
+  var newArr = [];
+  var removed = [];
+  var m = 0;
+  //Track removed to return at the end
+  //if no optionalDeleteCount
+  if(arguments.length === 2){
+    optionalDeleteCount = array.length - start;
+  }
+  if(optionalDeleteCount > (array.length - start)){
+    optionalDeleteCount = array.length - start;
+  }
+  if(optionalDeleteCount < 0){
+    optionalDeleteCount = 0;
+  }
+  var indexOfArray = start + optionalDeleteCount;
+    for (var k = start; optionalDeleteCount; k++){
+      removed[m] = (array[k]);
+      m++;
+      optionalDeleteCount--;
+    }
+  //1. Copy elements of `array` up to the start. 
+  for(var i = 0; i < start; i++){
+    newArr[i] = (array[i]);
+  }
+  //2. Add the items passed as arguments
+  var toAdd = 3
+  for(i; toAdd < arguments.length; i++){
+    newArr[i] = (arguments[toAdd])
+    toAdd++;
+  } 
+  //3. Push rest of array, starting at array[indexOfArray]
+  for (i; indexOfArray < array.length; i++) {
+    newArr[i] = (array[indexOfArray]);
+    indexOfArray++;
+  }
+  for(var y = 0; y < newArr.length; y++){
+    array[y] = newArr[y];
+  }
+  array.length = newArr.length;
+  return removed;
+}
+
+tests({
+  'It will return an array containing the deleted items.':function() {
+    var family = ['Blanca', 'Luis', 'Gael']
+    var result = splice(family, 1, 1);
+    eq(result.length, 1
+    )
+    eq(result[0], 'Luis');
+  },
+  'It will take `start`; the index at which to begin changing the array.':function() {
+    var family = ['Blanca', 'Luis', 'Gael']
+    var result = splice(family, 1);
+    eq(result.length, 2
+    )
+    eq(result[0], 'Luis');
+    eq(result[1], 'Gael');
+    eq(family.length, 1);
+    eq(family[0], 'Blanca');
+  },
+  'If `start` is ommitted, it will return an empty array and the originalArray will be intact.': function() {
+    var family = ['Blanca', 'Luis', 'Gael']
+    var result = splice(family);
+    eq(result.length, 0
+    )
+    eq(family[0], 'Blanca');
+    eq(family[1], 'Luis');
+    eq(family[2], 'Gael');
+  },
+  'If `start` is greater than the length of the array, start will be set to the length of the array.': function() {
+    var months = ['Jan', 'March', 'April', 'June']
+    result = splice(months, 7) 
+    eq(result.length, 0);
+    eq(months.length, 4);
+    eq(months[0], 'Jan');
+    eq(months[1], 'March');
+    eq(months[2], 'April');
+    eq(months[3], 'June');
+  },
+  'If `start` is negative, it will begin that many elements from the end of the array (with origin -1, meaning -n is the index of the nth last element and is therefore equivalent to the index of array.length - n).': function() {
+    months = ["Jan", "March", "April", "June"]
+    result = splice(months, -3)
+    eq(result.length, 3);
+    eq(result[0], 'March');
+    eq(result[1], 'April');
+    eq(result[2], 'June');
+    eq(months.length, 1);
+    eq(months[0], 'Jan');
+  },
+  'If the absolute value of start is greater than the length of the array, it will begin from index 0.': function() {
+    months = ["Jan", "March", "April", "June"]
+    result = splice(months, -7);
+    eq(result.length, 4);
+    eq(result[0], 'Jan');
+    eq(result[1], 'March');
+    eq(result[2], 'April');
+    eq(result[3], 'June');
+    eq(months.length, 0);
+  },
+  'If start is zero, and no optionalDelete, it will delete all elements in the array.': function() {
+    months = ["Jan", "March", "April", "June"]
+    result = splice(months, 0);
+    eq(result.length, 4);
+    eq(result[0], 'Jan');
+    eq(result[1], 'March');
+    eq(result[2], 'April');
+    eq(result[3], 'June');
+    eq(months.length, 0);
+  },
+  'It will take an optionalDeleteCount; an integer indicating the number of elements in the array to remove from start.': function() {
+    months = ["Jan", "March", "April", "June"]
+    result = splice(months, 1, 1);
+    eq(result.length, 1);
+    eq(result[0], 'March');
+    eq(months[0], 'Jan');
+    eq(months[1], 'April');
+    eq(months[2], 'June');
+    eq(months.length, 3);
+  },
+  'If optionalDeleteCount is omitted, then all the elements from start to the end of the array will be deleted.': function() {
+    months = ["Jan", "March", "April", "June"]
+    result = splice(months, 1);
+    eq(months.length, 1);
+    eq(result.length, 3);
+    eq(months[0], 'Jan');
+    eq(result[0], 'March');
+    eq(result[1], 'April');
+    eq(result[2], 'June');
+  },
+  'If optionalDeleteCount is equal to or larger than array.length - start (that is, if it is equal to or greater than the number of elements left in the array, starting at start), then all the elements from start to the end of the array will be deleted.': function() {
+  months = ["Jan", "March", "April", "June"]
+  result = splice(months, 1, 4);
+    eq(months[0], 'Jan');
+    eq(result.length, 3)
+    eq(result[0], 'March');
+    eq(result[1], 'April');
+    eq(result[2], 'June');
+  },
+  'If deleteCount is 0, no elements are removed.': function() {
+    var myNumbers = [1, 2];
+    result = splice(myNumbers, 1, 0)
+    eq(result.length, 0);
+    eq(myNumbers.length, 2);
+    eq(myNumbers[0], 1);
+    eq(myNumbers[1], 2);
+  },
+  'If deleteCount is negative, no elements are removed.': function() {
+    var myNumbers = [1, 2];
+    result = splice(myNumbers, 1, -1)
+    eq(result.length, 0);
+    eq(myNumbers.length, 2);
+    eq(myNumbers[0], 1);
+    eq(myNumbers[1], 2);
+  },
+  'optionalItem1, optionalItem2, ... are elements to add to the array, beginning from start.': function() {
+    var myNumbers = [1, 2];
+    result = splice(myNumbers, 1, 1,4)
+    eq(result.length, 1);
+    eq(result[0], 2);
+    eq(myNumbers.length, 2);
+    eq(myNumbers[0], 1);
+    eq(myNumbers[1], 4);
+  },
+  'If the specified number of elements to insert differs from the number of elements being removed, the array`s length will be different at the end of the call.': function() {
+    var months = ["Jan", "Feb", "March", "April", "June"];
+    result = splice(months, 4, 1, 'May', 'x')
+    eq(result.length, 1);
+    eq(result[0], 'June');
+    eq(months.length, 6);
+    eq(months[0], 'Jan');
+    eq(months[1], 'Feb');
+    eq(months[2], 'March');
+    eq(months[3], 'April');
+    eq(months[4], 'May');
+    eq(months[5], 'x');
+  }
+});
+
+</script>

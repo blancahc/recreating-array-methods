@@ -28,4 +28,4 @@ This is an exercise for the Watch and Code testing series.
 17. Done - Array.prototype.reverse
 18. Done - Array.prototype.copyWithin
 19. Done - Array.prototype.sort
-20. Array.prototype.splice
+20. Done - Array.prototype.splice
