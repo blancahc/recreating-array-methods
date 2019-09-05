@@ -2,7 +2,7 @@
 <script>
 
 function copyWithin(array, target, optionalStart, optionalEnd) {
-  if(!optionalStart){
+  if(!optionalStart || Math.abs(optionalStart) > array.length){
     optionalStart = 0;
   }
   if (optionalStart < 0){
@@ -14,7 +14,7 @@ function copyWithin(array, target, optionalStart, optionalEnd) {
   if (optionalEnd < 0){
     optionalEnd = array.length + optionalEnd;
   }
-  if(!target){
+  if(!target || Math.abs(target) > array.length) {
     target = 0;
   }
   if (target < 0){
