@@ -2,7 +2,7 @@
 <script>
 
 function copyWithin(array, target, optionalStart, optionalEnd) {
-  if(!optionalStart || Math.abs(optionalStart) > array.length){
+  if(!optionalStart || Math.abs(optionalStart) > array.length || typeof optionalStart !== 'number') {
     optionalStart = 0;
   }
   if (optionalStart < 0){
@@ -23,8 +23,8 @@ function copyWithin(array, target, optionalStart, optionalEnd) {
   if (target < 0){
     target = array.length + target;
   }
-  //copy array using slice 
-  var arrCopy = []//= array.slice(optionalStart, optionalEnd);
+  //copy array 
+  var arrCopy = [];
   for (var j = optionalStart; j < optionalEnd; j++){
     if(j in array){
       arrCopy[arrCopy.length] = array[j];
@@ -37,8 +37,8 @@ function copyWithin(array, target, optionalStart, optionalEnd) {
   var arrayOriginalLength = array.length;
   
   //starting at the target, change each element of the array to the arrCopy. 
-  for (var i = 0; i < arrCopy.length; i++ ){
-    if(i in arrCopy){
+  for (var i = 0; i < arrCopy.length; i++ ) {
+    if(i in arrCopy) {
       array[target] = arrCopy[i];
     }else {
       delete[target];
@@ -160,6 +160,14 @@ tests({
     eq(3 in result, false);
     eq(result[4], 4);
     eq(result.length, 5)
-  }
+  },
+	'If start evaluates is not a number, copyWithin should copy from index 0.': function() {
+		arr = [1, 2, 3, 4];
+		result = copyWithin(arr, -2, 'abc');
+		eq(arr[0], 1);
+		eq(arr[1], 2);
+		eq(arr[2], 1);
+		eq(arr[3], 2);
+	}
 });
 </script>
